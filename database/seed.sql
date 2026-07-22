@@ -1,9 +1,11 @@
+-- Demo users. Password for ALL of them is: admin123
+-- (bcrypt hash below — safe to publish; change before any real deployment)
 INSERT INTO users(name,email,password,role)
 VALUES
-('Admin','admin@test.com','$2b$10$dummyhash','ADMIN'),
-('Sales User','sales@test.com','$2b$10$dummyhash','SALES'),
-('Warehouse User','warehouse@test.com','$2b$10$dummyhash','WAREHOUSE'),
-('Accounts User','accounts@test.com','$2b$10$dummyhash','ACCOUNTS');
+('Admin','admin@test.com','$2b$10$iVhCcLGJM4Q5XG8aXnzS2.71KrfCOEBixkCqPtGcYwcbHHK1N209q','ADMIN'),
+('Sales User','sales@test.com','$2b$10$iVhCcLGJM4Q5XG8aXnzS2.71KrfCOEBixkCqPtGcYwcbHHK1N209q','SALES'),
+('Warehouse User','warehouse@test.com','$2b$10$iVhCcLGJM4Q5XG8aXnzS2.71KrfCOEBixkCqPtGcYwcbHHK1N209q','WAREHOUSE'),
+('Accounts User','accounts@test.com','$2b$10$iVhCcLGJM4Q5XG8aXnzS2.71KrfCOEBixkCqPtGcYwcbHHK1N209q','ACCOUNTS');
 
 INSERT INTO customers(
 customer_name,mobile,email,business_name,
