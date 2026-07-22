@@ -1,0 +1,50 @@
+# Render Blueprint — deploys the whole app (API + Postgres + static frontend).
+# In the Render dashboard: New → Blueprint → connect this repo → Apply.
+# See docs/DEPLOYMENT.md for the full walkthrough and the two post-deploy env vars.
+
+databases:
+  - name: mini-erp-db
+    databaseName: mini_erp
+    plan: free
+
+services:
+  # ---- Backend API (Express + TypeScript) ----
+  - type: web
+    name: mini-erp-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: node dist/src/server.js
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mini-erp-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_VERSION
+        value: "20"
+      # Set to the frontend URL (e.g. https://mini-erp-web.onrender.com) to lock
+      # down CORS. Optional — defaults to allowing all origins if unset.
+      - key: CORS_ORIGIN
+        sync: false
+
+  # ---- Frontend (React static site) ----
+  - type: web
+    name: mini-erp-web
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      # REQUIRED: set to the API URL WITH /api, e.g.
+      # https://mini-erp-api.onrender.com/api  (after the API service is live)
+      - key: VITE_API_URL
+        sync: false
+    routes:
+      # SPA fallback so client-side routes (/customers, /reports, …) resolve.
+      - type: rewrite
+        source: /*
+        destination: /index.html
