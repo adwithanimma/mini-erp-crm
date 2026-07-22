@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment / secrets
+.env
+**/.env
+.env.local
+.env.*.local
+!.env.example
+!**/.env.example
+
+# Claude Code local settings (may contain machine-specific commands/secrets)
+.claude/settings.local.json
+
+# Build output
+dist/
+build/
+**/dist/
+**/build/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+.idea/
+
+# Runtime
+*.pid
+*.seed
+coverage/
