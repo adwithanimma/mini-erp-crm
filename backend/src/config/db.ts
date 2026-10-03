@@ -3,9 +3,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// In production (managed Postgres on Render/Railway/Neon/etc.) a single
-// DATABASE_URL is provided and SSL is required. Locally we fall back to the
-// discrete DB_* variables with no SSL.
 const pool = process.env.DATABASE_URL
   ? new Pool({
       connectionString: process.env.DATABASE_URL,
