@@ -1,10 +1,3 @@
---
--- PostgreSQL database dump
---
-
-
--- Dumped from database version 18.4
--- Dumped by pg_dump version 18.4
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -49,16 +42,8 @@ CREATE SEQUENCE public.challan_items_id_seq
     CACHE 1;
 
 
---
--- Name: challan_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
 ALTER SEQUENCE public.challan_items_id_seq OWNED BY public.challan_items.id;
 
-
---
--- Name: challans; Type: TABLE; Schema: public; Owner: -
---
 
 CREATE TABLE public.challans (
     id integer NOT NULL,
@@ -567,9 +552,5 @@ ALTER TABLE ONLY public.stock_movements
 ALTER TABLE ONLY public.stock_movements
     ADD CONSTRAINT stock_movements_product_id_fkey FOREIGN KEY (product_id) REFERENCES public.products(id) ON DELETE CASCADE;
 
-
---
--- PostgreSQL database dump complete
---
 
 

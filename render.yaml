@@ -1,6 +1,4 @@
-# Render Blueprint — deploys the whole app (API + Postgres + static frontend).
-# In the Render dashboard: New → Blueprint → connect this repo → Apply.
-# See docs/DEPLOYMENT.md for the full walkthrough and the two post-deploy env vars.
+
 
 databases:
   - name: mini-erp-db

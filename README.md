@@ -1,147 +1,263 @@
 # Mini ERP / CRM
 
-A full-stack ERP + CRM for small businesses: customers, products, inventory,
-sales challans, dashboard analytics, reports, and role-based access — with a
-configurable company profile (currency, tax, branding).
+A full-stack ERP and CRM application designed for small businesses. It provides customer management, product and inventory management, sales challans, dashboard analytics, reports, role-based access, and configurable company settings.
 
-## Tech stack
+## Tech Stack
 
-| Layer     | Stack                                                        |
-| --------- | ----------------------------------------------------------- |
-| Backend   | Node.js, Express, TypeScript, PostgreSQL (`pg`)             |
-| Auth      | JWT (`jsonwebtoken`), password hashing with `bcrypt`        |
-| Frontend  | React, Vite, React Router, Axios, Recharts                  |
-| Exports   | `jspdf` + `jspdf-autotable` (PDF), `xlsx` (Excel)           |
+| Layer          | Technologies                                    |
+| -------------- | ----------------------------------------------- |
+| Backend        | Node.js, Express, TypeScript, PostgreSQL (`pg`) |
+| Authentication | JWT (`jsonwebtoken`), bcrypt                    |
+| Frontend       | React, Vite, React Router, Axios, Recharts      |
+| Exports        | jsPDF, jsPDF-AutoTable, XLSX                    |
 
 ## Features
 
-- **Authentication & RBAC** — JWT login with four roles (ADMIN, SALES,
-  WAREHOUSE, ACCOUNTS). Access is enforced on **both** the API (route guards)
-  and the UI (sidebar, routing, and controls adapt to the role).
-- **Customers** — full CRUD with type/status, delete with foreign-key-safe guards.
-- **Products & Inventory** — CRUD, stock levels, low-stock / out-of-stock flags.
-- **Sales Challans** — multi-line challans that price items server-side, decrement
-  stock, and support a status workflow (CREATED → DISPATCHED → DELIVERED / CANCELLED).
-- **Dashboard** — KPI cards, today's sales / orders / revenue widgets, and charts
-  (sales by month, stock IN vs OUT, top products, recent activity).
-- **Reports** — six reports (Customer, Sales, Inventory, Product, Monthly Revenue,
-  Low Stock) exportable as **PDF** or **Excel**.
-- **Global search** — search customers, products, SKUs, and challans from the navbar
-  (results scoped to the user's role).
-- **Settings** — admin-configurable company name, GST number, logo, currency, and
-  tax percentage that apply across the app.
+### Authentication and Role-Based Access
 
-## Roles
+* JWT-based login.
+* Four user roles: ADMIN, SALES, WAREHOUSE, and ACCOUNTS.
+* API routes are protected using role-based middleware.
+* The frontend also adjusts available pages, sidebar options, and controls according to the logged-in user's role.
 
-| Role      | Can access                          |
-| --------- | ----------------------------------- |
-| ADMIN     | Everything                          |
-| SALES     | Customers, Sales Challans           |
-| WAREHOUSE | Products, Inventory                 |
-| ACCOUNTS  | Dashboard (reports), Challans (view)|
+### Customers
 
-## Project structure
+* Add, view, update, and delete customers.
+* Customer type and status management.
+* Foreign-key checks before deleting customers.
 
-```
+### Products and Inventory
+
+* Add, update, view, and delete products.
+* Track available stock.
+* Identify low-stock and out-of-stock products.
+
+### Sales Challans
+
+* Create challans with multiple products.
+* Product prices are taken from the server.
+* Stock is updated when a challan is created.
+* Challan status workflow:
+
+`CREATED → DISPATCHED → DELIVERED / CANCELLED`
+
+### Dashboard
+
+The dashboard provides:
+
+* KPI cards
+* Today's sales
+* Today's orders
+* Revenue information
+* Monthly sales chart
+* Stock IN vs OUT chart
+* Top products
+* Recent activity
+
+### Reports
+
+The application includes six reports:
+
+* Customer Report
+* Sales Report
+* Inventory Report
+* Product Report
+* Monthly Revenue Report
+* Low Stock Report
+
+Reports can be exported as:
+
+* PDF
+* Excel
+
+### Global Search
+
+The navbar includes a global search for:
+
+* Customers
+* Products
+* SKUs
+* Challans
+
+Search results are filtered according to the logged-in user's role.
+
+### Settings
+
+Administrators can configure:
+
+* Company name
+* GST number
+* Company logo
+* Currency
+* Tax percentage
+
+These settings are used throughout the application.
+
+## User Roles
+
+| Role      | Access                                  |
+| --------- | --------------------------------------- |
+| ADMIN     | All modules                             |
+| SALES     | Customers and Sales Challans            |
+| WAREHOUSE | Products and Inventory                  |
+| ACCOUNTS  | Dashboard, Reports, and Challan viewing |
+
+## Project Structure
+
+```text
 mini-erp-crm/
-├── backend/          Express + TypeScript API
+├── backend/
 │   └── src/
-│       ├── controllers/  routes/  services/  repositories/  middleware/
-├── frontend/         React + Vite SPA
+│       ├── controllers/
+│       ├── routes/
+│       ├── services/
+│       ├── repositories/
+│       └── middleware/
+│
+├── frontend/
 │   └── src/
-│       ├── pages/  components/  utils/  api/
+│       ├── pages/
+│       ├── components/
+│       ├── utils/
+│       └── api/
+│
 ├── database/
-│   ├── schema.sql    table definitions
-│   └── seed.sql      demo users, customer, product
-└── docs/             API, architecture, deployment notes
+│   ├── schema.sql
+│   └── seed.sql
+│
+└── docs/
+    ├── API.md
+    ├── architecture/
+    └── deployment/
 ```
 
-## Getting started
+## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+
-- PostgreSQL 14+
+* Node.js 18 or later
+* PostgreSQL 14 or later
 
-### 1. Database
+### 1. Set Up the Database
 
-Create the database, then load the schema and demo data:
+Create the database and run the schema and seed files:
 
 ```bash
 createdb mini_erp
+
 psql -d mini_erp -f database/schema.sql
+
 psql -d mini_erp -f database/seed.sql
 ```
 
-### 2. Backend
+### 2. Start the Backend
 
 ```bash
 cd backend
 npm install
-cp .env.example .env      # then edit .env with your DB password + a JWT secret
-npm run dev               # starts on http://localhost:5000
+cp .env.example .env
 ```
 
-`.env` keys (see `backend/.env.example`):
+Update the `.env` file with your PostgreSQL credentials and JWT secret.
 
-```
+```env
 PORT=5000
+
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=your_db_password
 DB_NAME=mini_erp
+
 JWT_SECRET=replace_with_a_long_random_secret
 ```
 
-### 3. Frontend
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The backend runs on:
+
+```text
+http://localhost:5000
+```
+
+### 3. Start the Frontend
+
+Open another terminal:
 
 ```bash
 cd frontend
 npm install
-npm run dev               # starts on http://localhost:5173
+npm run dev
 ```
 
-The frontend expects the API at `http://localhost:5000/api` (see
-`frontend/src/api/axios.js`).
+The frontend runs on:
 
-### Demo login
+```text
+http://localhost:5173
+```
 
-The seed creates one user per role. The password for **all** of them is `admin123`:
+The frontend connects to the backend through:
 
-| Email                | Role      |
-| -------------------- | --------- |
-| admin@test.com       | ADMIN     |
-| sales@test.com       | SALES     |
-| warehouse@test.com   | WAREHOUSE |
-| accounts@test.com    | ACCOUNTS  |
+```text
+http://localhost:5000/api
+```
 
-## API overview
+The API URL is configured in:
 
-All routes are under `/api` and require a `Bearer` token except `POST /api/auth/login`.
+```text
+frontend/src/api/axios.js
+```
 
-| Method | Endpoint                    | Roles                       |
-| ------ | --------------------------- | --------------------------- |
-| POST   | `/auth/login`               | public                      |
-| GET    | `/dashboard/stats`          | ADMIN, ACCOUNTS             |
-| GET/POST/PUT/DELETE | `/customers[/:id]` | ADMIN, SALES              |
-| GET    | `/products`                 | ADMIN, WAREHOUSE, SALES     |
-| POST/PUT/DELETE | `/products[/:id]`  | ADMIN, WAREHOUSE            |
-| GET/POST | `/challans`               | ADMIN, SALES (+ ACCOUNTS read) |
-| PATCH  | `/challans/:id/status`      | ADMIN, SALES                |
-| GET    | `/reports/:type`            | ADMIN, ACCOUNTS             |
-| GET    | `/search?q=`                | any (results role-scoped)   |
-| GET    | `/settings`                 | any                         |
-| PUT    | `/settings`                 | ADMIN                       |
+## Demo Accounts
 
-See `docs/API.md` for details.
+The database seed creates one account for each role.
 
-## Security notes
+All demo accounts use the password:
 
-- `backend/.env` is git-ignored — never commit real secrets.
-- The seed password hash is published deliberately for demo convenience; use a
-  strong password and rotate `JWT_SECRET` before any real deployment.
+```text
+admin123
+```
 
-## License
+| Email                                           | Role      |
+| ----------------------------------------------- | --------- |
+| [admin@test.com](mailto:admin@test.com)         | ADMIN     |
+| [sales@test.com](mailto:sales@test.com)         | SALES     |
+| [warehouse@test.com](mailto:warehouse@test.com) | WAREHOUSE |
+| [accounts@test.com](mailto:accounts@test.com)   | ACCOUNTS  |
 
-See [LICENSE](LICENSE).
+## API Overview
+
+All API endpoints are under `/api`.
+
+Authentication is required for all endpoints except the login endpoint.
+
+| Method              | Endpoint               | Roles                   |
+| ------------------- | ---------------------- | ----------------------- |
+| POST                | `/auth/login`          | Public                  |
+| GET                 | `/dashboard/stats`     | ADMIN, ACCOUNTS         |
+| GET/POST/PUT/DELETE | `/customers[/:id]`     | ADMIN, SALES            |
+| GET                 | `/products`            | ADMIN, WAREHOUSE, SALES |
+| POST/PUT/DELETE     | `/products[/:id]`      | ADMIN, WAREHOUSE        |
+| GET/POST            | `/challans`            | ADMIN, SALES            |
+| GET                 | `/challans`            | ADMIN, SALES, ACCOUNTS  |
+| PATCH               | `/challans/:id/status` | ADMIN, SALES            |
+| GET                 | `/reports/:type`       | ADMIN, ACCOUNTS         |
+| GET                 | `/search?q=`           | All roles               |
+| GET                 | `/settings`            | All roles               |
+| PUT                 | `/settings`            | ADMIN                   |
+
+For the complete API details, see `docs/API.md`.
+
+## Security
+
+* `.env` is included in `.gitignore` and should not be committed.
+* Do not use real passwords in the seed data for production.
+* Change the demo passwords before deployment.
+* Use a strong, randomly generated `JWT_SECRET` in production.
+* API access is protected using JWT authentication and role-based middleware.
+
+
